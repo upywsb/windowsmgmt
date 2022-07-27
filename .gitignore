@@ -1,6 +1,4 @@
 .git
-windowsmgmt/vms/tasks/vars/print_var.yaml
-vms/tasks/vars/print_var.yaml
-windowsmgmt/vms/tasks/vars/*.txt
+vms/tasks/vars/
 invectory.yaml
 
