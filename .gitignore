@@ -1,3 +1,3 @@
 .git
-vms/tasks/vars/*
+windowsmgmt/vms/tasks/vars/print_var.yaml
 invectory.yaml
