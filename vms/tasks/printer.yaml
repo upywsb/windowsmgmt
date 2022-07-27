@@ -1,0 +1,80 @@
+---
+gather_facts: no
+ hosts: vms
+#- namae: "Printers"
+ 
+  tasks:
+  
+      
+
+    #     foreach ($printer in $printers) {
+    #         remove-printer -name $printer.name
+    #     }
+    #     
+    #     foreach ($printerdriver in $printerdrivers) {
+    #         remove-printerdriver -name $printerdriver.name
+    #     }
+    #     
+    #     foreach ($printerport in $printerports) {
+    #         remove-printerport -name $printerrt.name
+    #     }
+    #     if ($printers -or $printerdrivers -or $printerports) {
+    #         write-host "changed"
+    #     }
+    #   register: canon_c7260
+    #   failed_when: no
+    #   changed_when: canon_c7260.stdout.find("changed") != -1
+
+    # - name: remove printer driver
+    #   win_shell: |
+    #     $drivers = (get-windowsdriver -online  | where-object {$_.originalfilename -like "*cnp60ha64.inf"}).driver
+    #     foreach ($driver in $drivers) {
+    #         pnputil.exe /delete-driver $driver
+    #     }
+    #   register: removal
+    #   failed_when: no
+    #   changed_when: removal.stdout.find("driver package deleted successfully.") != -1
+
+  
+
+    # - name: Install printer driver
+    #   win_shell: |
+    #     Set-Location -LiteralPath "\\diskstation01.crombeen.internal\ictadmin\Hardware\Printer\Canon iR ADVANCE\GPlus_PCL6_Driver_V200_32_64_00\x64\Driver"
+    #     PNPUtil.exe /add-driver CNP60MA64.INF /install
+    #   register: driver
+    #   changed_when: 'driver.stdout.find("Added driver packages:  1") != -1'
+    #   failed_when: driver.stdout.find("Driver package added successfully.") == -1
+
+
+
+    # - name: Create printer iR-ADV 6555
+    #   win_shell: |
+    #     Add-PrinterPort -Name "IP_192.168.0.225" -PrinterHostAddress "canon_6555.crombeen.internal" -PortNumber 9100
+    #     Add-PrinterDriver -Name "Canon Generic Plus PCL6"
+    #     Add-Printer -Name "iR-ADV 6555 III (Zwart-Wit Crombeen)" -DriverName "Canon Generic Plus PCL6" -Port "IP_192.168.0.225"
+    #   register: canon_6555
+    #   failed_when: no
+    #   changed_when: canon_6555.rc == 0
+
+  #  - name: Create printer iR-ADV C3530
+  #    win_shell: |
+  #      Add-PrinterPort -Name "IP_192.168.0.226" -PrinterHostAddress "canon_c3530.crombeen.internal" -PortNumber 9100
+  #      Add-PrinterDriver -Name "Canon Generic Plus PCL6"
+  #      Add-Printer -Name "iR-ADV C3530 (Kleur Crombeen)" -DriverName "Canon Generic Plus PCL6" -Port "IP_192.168.0.226"
+  #    register: canon_c3530
+  #    failed_when: no
+  #    changed_when: canon_c3530.rc == 0
+
+
+
+  #  - name: Rename printer
+  #    win_shell: |
+  #      ( Get-Printer -Name "{{ item }}" ) -and ( Rename-Printer -Name "{{ item }}" -NewName "{{ new_name }}" )
+  #    with_items: '{{ old_names }}'
+
+  #  - name: Default to black-white printing ({{ user }}) for {{ new_name }}
+  #    win_shell: |
+  #      Set-PrintConfiguration -PrinterName "{{ new_name }}" -Color $false -Confirm:$false
+  #    ignore_errors: yes
+  #    become: yes
+  #    become_user: '{{ user }}' 

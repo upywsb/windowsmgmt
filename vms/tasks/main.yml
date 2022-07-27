@@ -1,0 +1,10 @@
+---
+- namae: "Chocolatey"
+  hosts: vms
+  tasks:
+	-name: Install Google Chrome
+	 win_chocolatey:
+		name: googlechrome
+		state: present
+		ignore_checksum: yes 
+

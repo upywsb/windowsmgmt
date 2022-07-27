@@ -1,0 +1,44 @@
+---
+- hosts: vms
+  gather_facts: no
+  tasks:
+  - include_vars: print_var.yaml
+    tags: vt
+  - name: test
+    tags: test
+    ansible.windows.win_powershell:
+      script:
+        if (!(Get-Printer -Name {{ p_name }}) -And (Get-PrinterPort -Name {{ p_port_name }}) -and (Get-PrinterDriver -Name '{{ p_driver_name }}')){echo "tak"}
+  - name: addport
+    ansible.windows.win_powershell:
+      script: |
+        if (!(Get-PrinterPort -Name {{ p_port_name }})) {
+          add-PrinterPort -Name {{ p_port_name }}  -PrinterHostAddress {{ p_ip }} -PortNumber {{ p_port_nr }} 
+          $Ansible.Changed = $true
+        }
+        elseif (!((Get-PrinterPort -Name {{ p_port_name }}).PrinterHostAddress -eq '{{ p_ip }}')) {
+          $Ansible.Failed = $true
+        }
+        else {
+          $Ansible.Changed = $false
+        }
+  - name: driver
+    win_shell: |
+      set-location -path {{ p_driver_path }}
+      pnputil.exe /add-driver {{ p_inf_name }} /install
+      Add-PrinterDriver -Name {{ p_driver_name }}
+    register: driver
+    changed_when: "'added driver packages:  1' in driver.stdout"
+    failed_when: "'Driver package added successfully.' not in driver.stdout"
+  - name: Create printer Parter
+    ansible.windows.win_powershell:
+      script: |
+        if (!(Get-Printer -Name {{ p_name }}) -And (Get-PrinterPort -Name {{ p_port_name }}) -and (Get-PrinterDriver -Name '{{ p_driver_name }}')) {
+          Add-Printer -Name {{ p_name }} -DriverName '{{ p_driver_name }}' -PortName {{ p_port_name }} 
+        }
+        elseif (Get-Printer -Name {{ p_name}}) {
+          $Ansible.Changed = $false
+        }
+        else {
+        $Ansible.Failed = $true
+        }

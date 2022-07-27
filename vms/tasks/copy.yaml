@@ -1,0 +1,7 @@
+- hosts: vms
+  gather_facts: no
+  tasks:
+  - name: copy_f
+    community.windows.win_robocopy:
+      src: \\dc01\MSI\Develop257i\Polish\Drivers\PCL6\Win_x64
+      dest: C:\tmp
